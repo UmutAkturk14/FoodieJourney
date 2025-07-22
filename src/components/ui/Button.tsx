@@ -1,22 +1,39 @@
 import React, { useState } from "react";
 import { Copy } from "lucide-react";
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+// Base props shared between both <a> and <button>
+interface BaseProps {
+  children?: React.ReactNode;
   variant?: "primary" | "secondary" | "call-to-action" | "outlined" | "basic";
   size?: "sm" | "md" | "lg";
-  to?: string;
+  className?: string;
   copyText?: string;
 }
+
+// Props for anchor version
+interface AnchorButtonProps
+  extends BaseProps,
+    Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "type" | "onClick"> {
+  to: string;
+  as?: "a";
+}
+
+// Props for button version
+interface RegularButtonProps
+  extends BaseProps,
+    React.ButtonHTMLAttributes<HTMLButtonElement> {
+  to?: undefined;
+  as?: "button";
+}
+
+type ButtonProps = AnchorButtonProps | RegularButtonProps;
 
 export const Button: React.FC<ButtonProps> = ({
   variant = "basic",
   size = "md",
-  to,
-  onClick,
-  children,
-  copyText,
-  disabled,
   className = "",
+  copyText,
+  children,
   ...props
 }) => {
   const [isCopied, setIsCopied] = useState(false);
@@ -45,8 +62,8 @@ export const Button: React.FC<ButtonProps> = ({
 
   const variantClasses = variantMap[variant];
   const sizeClasses = sizeMap[size];
-
-  const combinedClassName = `${baseStyle} ${sizeClasses} ${variantClasses} ${className}`;
+  const combinedClassName =
+    `${baseStyle} ${sizeClasses} ${variantClasses} ${className}`.trim();
 
   const handleCopy = async () => {
     if (!copyText) return;
@@ -59,35 +76,25 @@ export const Button: React.FC<ButtonProps> = ({
       console.error("Failed to copy:", err);
     }
   };
-  if (to) {
-    // Extract potentially problematic props from `props`
-    const {
-      type,
-      onClick: _onClick, // rename to avoid conflict
-      copyText: _copyText,
-      disabled: _disabled,
-      onCopy,
-      onTransitionStartCapture,
-      onTransitionEndCapture,
-      onAnimationStart,
-      onAnimationEnd,
-      onAnimationIteration,
-      // add any others if needed
-      ...anchorProps
-    } = props;
 
+  // Anchor rendering
+  if ("to" in props && props.to) {
+    const { to, ...anchorProps } = props;
     return (
       <a
         href={to}
         className={combinedClassName}
         target="_blank"
         rel="noopener noreferrer"
-        {...anchorProps} // only valid anchor props here
+        {...anchorProps}
       >
         {children ?? "Visit Link"}
       </a>
     );
   }
+
+  // Button rendering
+  const { onClick, disabled, ...buttonProps } = props as RegularButtonProps;
 
   return (
     <div className="relative inline-block group">
@@ -99,7 +106,7 @@ export const Button: React.FC<ButtonProps> = ({
         }}
         disabled={disabled}
         className={combinedClassName}
-        {...props}
+        {...buttonProps}
       >
         {children ?? "Click Me"}
         {copyText && (
