@@ -1,3 +1,4 @@
+import React, { useEffect, useRef } from "react";
 import { X } from "lucide-react";
 import { Badge } from "@components/ui/Badge";
 import { NutritionLabel } from "./NutritionalLabel";
@@ -32,9 +33,36 @@ export const FoodItemPopUp: React.FC<FoodItemPopUpProps> = ({
   food,
   onClose,
 }) => {
+  const popupRef = useRef<HTMLDivElement>(null);
+
+  // Handle ESC key press
+  useEffect(() => {
+    const handleEsc = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, [onClose]);
+
+  // Handle click outside
+  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // If the click is directly on the overlay (not inside popup content)
+    if (popupRef.current && !popupRef.current.contains(e.target as Node)) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4">
-      <div className="bg-white dark:bg-card rounded-xl shadow-2xl w-full max-w-4xl relative p-6 animate-in fade-in slide-in-from-bottom duration-300">
+    <div
+      className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4"
+      onClick={handleOverlayClick}
+    >
+      <div
+        ref={popupRef}
+        className="bg-white dark:bg-card rounded-xl shadow-2xl w-full max-w-4xl relative p-6 animate-in fade-in slide-in-from-bottom duration-300"
+      >
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -43,7 +71,7 @@ export const FoodItemPopUp: React.FC<FoodItemPopUpProps> = ({
           <X className="w-5 h-5" />
         </button>
 
-        <div className="flex flex-col md:flex-row gap-6">
+        <div className="flex flex-col md:flex-row gap-6 mt-4">
           {/* Left Column: Description & Info */}
           <div className="flex-1">
             {/* Title & Description */}
