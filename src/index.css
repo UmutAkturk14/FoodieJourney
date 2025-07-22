@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+.quokka-font {
+  font-family: "Rakkas  ", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.hljs {
+  background: inherit !important;
+}
+
+.bg-gradient-soft {
+  background-color: oklch(95% 0.052 163.051);
+}
+
+.bg-gradient-primary {
+  background-color: oklch(37.8% 0.051 172.552);
+}
+
+.text-primary-foreground {
+  color: white;
+}
