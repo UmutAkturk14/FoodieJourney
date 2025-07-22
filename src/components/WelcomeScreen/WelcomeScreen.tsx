@@ -1,5 +1,5 @@
 import { Button } from "@components/ui/Button";
-import { Utensils, Heart, Activity, Target } from "lucide-react";
+import { Leaf, Heart, Activity, Target } from "lucide-react";
 
 interface WelcomeScreenProps {
   onStart: () => void;
@@ -13,7 +13,7 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps) {
           {/* Logo */}
           <div className="flex items-center justify-center gap-3 mb-6">
             <div className="bg-gradient-primary p-3 rounded-full shadow-soft">
-              <Utensils className="w-8 h-8 text-primary-foreground" />
+              <Leaf className="w-8 h-8 text-primary-foreground" />
             </div>
             <h1 className="text-4xl font-bold text-foreground">FoodieGoodie</h1>
           </div>

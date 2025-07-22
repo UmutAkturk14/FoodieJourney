@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@components/ui/Button";
 import { Progress } from "@components/ui/Progress";
-import { Utensils } from "lucide-react";
+import { Leaf } from "lucide-react";
 import { QuestionCard } from "@components/QuestionCard/QuestionCard";
 import { WelcomeScreen } from "@components/WelcomeScreen/WelcomeScreen";
 import { ResultsScreen } from "@components/ResultsScreen/ResultsScreen";
@@ -178,8 +178,10 @@ export function HealthQuestionnaire() {
           </Button>
 
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Utensils className="w-4 h-4" />
-            <span>FoodieGoodie</span>
+            <div className="bg-emerald-700 p-3 text-white rounded-full">
+              <Leaf className="w-5 h-5" />
+            </div>
+            <span className="font-bold tracking-widest">FoodieGoodie</span>
           </div>
         </div>
       </div>
