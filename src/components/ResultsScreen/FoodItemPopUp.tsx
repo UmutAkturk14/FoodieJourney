@@ -1,5 +1,6 @@
 import { X } from "lucide-react";
 import { Badge } from "@components/ui/Badge";
+import { NutritionLabel } from "./NutritionalLabel";
 
 export type FoodItem = {
   name: string;
@@ -33,7 +34,8 @@ export const FoodItemPopUp: React.FC<FoodItemPopUpProps> = ({
 }) => {
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4">
-      <div className="bg-white dark:bg-card rounded-xl shadow-2xl w-full max-w-2xl relative p-6 animate-in fade-in slide-in-from-bottom duration-300">
+      <div className="bg-white dark:bg-card rounded-xl shadow-2xl w-full max-w-4xl relative p-6 animate-in fade-in slide-in-from-bottom duration-300">
+        {/* Close Button */}
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition"
@@ -41,82 +43,56 @@ export const FoodItemPopUp: React.FC<FoodItemPopUpProps> = ({
           <X className="w-5 h-5" />
         </button>
 
-        {/* Title */}
-        <div className="mb-4">
-          <h2 className="text-2xl font-bold text-card-foreground mb-1">
-            {food.name}
-          </h2>
-          <p className="text-sm text-muted-foreground">{food.description}</p>
-        </div>
+        <div className="flex flex-col md:flex-row gap-6">
+          {/* Left Column: Description & Info */}
+          <div className="flex-1">
+            {/* Title & Description */}
+            <div className="mb-4">
+              <h2 className="text-2xl font-bold text-card-foreground mb-1">
+                {food.name}
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                {food.description}
+              </p>
+            </div>
 
-        {/* Nutrition & Details */}
-        <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground mb-6">
-          <div>
-            <strong>Calories:</strong> {food.calories} kcal
-          </div>
-          <div>
-            <strong>Processing:</strong> {food.processing_level || "Unknown"}
-          </div>
-          <div>
-            <strong>Health Rating:</strong>{" "}
-            {food.healthiness_rating || "Unknown"}
-          </div>
-          <div>
-            <strong>Allergens:</strong>{" "}
-            {food.allergens && food.allergens.length > 0
-              ? food.allergens.join(", ")
-              : "None"}
-          </div>
-        </div>
-
-        {/* Nutritional Breakdown */}
-        {food.nutritional_data && (
-          <div className="mb-6">
-            <h4 className="font-semibold text-card-foreground mb-2">
-              Nutritional Info (per 100g)
-            </h4>
-            <div className="grid grid-cols-2 gap-y-2 text-sm text-muted-foreground">
+            {/* Quick Info Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-muted-foreground mb-6">
               <div>
-                <strong>Energy:</strong> {food.nutritional_data.energy_kJ} kJ
+                <strong>Calories:</strong> {food.calories} kcal
               </div>
               <div>
-                <strong>Calories:</strong> {food.nutritional_data.calories_kcal}{" "}
-                kcal
+                <strong>Processing:</strong>{" "}
+                {food.processing_level || "Unknown"}
               </div>
               <div>
-                <strong>Fat:</strong> {food.nutritional_data.fat_g} g
+                <strong>Health Rating:</strong>{" "}
+                {food.healthiness_rating || "Unknown"}
               </div>
               <div>
-                <strong>Saturated Fat:</strong>{" "}
-                {food.nutritional_data.saturated_fat_g} g
-              </div>
-              <div>
-                <strong>Carbs:</strong> {food.nutritional_data.carbohydrates_g}{" "}
-                g
-              </div>
-              <div>
-                <strong>Sugar:</strong> {food.nutritional_data.sugar_g} g
-              </div>
-              <div>
-                <strong>Fiber:</strong> {food.nutritional_data.fiber_g} g
-              </div>
-              <div>
-                <strong>Protein:</strong> {food.nutritional_data.protein_g} g
-              </div>
-              <div>
-                <strong>Salt:</strong> {food.nutritional_data.salt_g} g
+                <strong>Allergens:</strong>{" "}
+                {food.allergens && food.allergens.length > 0
+                  ? food.allergens.join(", ")
+                  : "None"}
               </div>
             </div>
-          </div>
-        )}
 
-        {/* Tags */}
-        <div className="flex flex-wrap gap-2 mt-4">
-          {food.tags.map((tag) => (
-            <Badge key={tag} variant="outline" className="text-xs">
-              {tag}
-            </Badge>
-          ))}
+            {/* Tags */}
+            <div className="flex flex-wrap gap-2 mt-2">
+              {food.tags.map((tag) => (
+                <Badge key={tag} variant="outline" className="text-xs">
+                  {tag}
+                </Badge>
+              ))}
+            </div>
+          </div>
+
+          {/* Right Column: Nutrition Facts */}
+          {food.nutritional_data && (
+            <div className="w-full md:w-[280px] shrink-0">
+              <NutritionLabel data={food.nutritional_data} />
+            </div>
+          )}
         </div>
       </div>
     </div>

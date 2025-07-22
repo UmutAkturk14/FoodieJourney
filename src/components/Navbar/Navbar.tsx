@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Menu, X, Leaf } from "lucide-react";
 import { Button } from "@components/ui/Button";
-import type { NavbarProps } from "@interfaces";
 
-const Navbar: React.FC<NavbarProps> = () => {
+const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
