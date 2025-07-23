@@ -35,9 +35,32 @@ export function QuestionCard({
   };
 
   const handleMultiSelect = (option: string) => {
-    const newSelection = selectedOptions.includes(option)
-      ? selectedOptions.filter((item) => item !== option)
-      : [...selectedOptions, option];
+    let newSelection: string[];
+
+    if (question.id === "dietaryNeeds") {
+      const isSelected = selectedOptions.includes(option);
+
+      if (option === "No restrictions") {
+        // Selecting "No restrictions" => deselect everything else
+        newSelection = isSelected ? [] : ["No restrictions"];
+      } else {
+        // Selecting other option while "No restrictions" is selected => remove it
+        newSelection = selectedOptions.filter(
+          (item) => item !== "No restrictions"
+        );
+
+        if (isSelected) {
+          newSelection = newSelection.filter((item) => item !== option);
+        } else {
+          newSelection.push(option);
+        }
+      }
+    } else {
+      // Default behavior for other multiselect questions
+      newSelection = selectedOptions.includes(option)
+        ? selectedOptions.filter((item) => item !== option)
+        : [...selectedOptions, option];
+    }
 
     setSelectedOptions(newSelection);
   };
