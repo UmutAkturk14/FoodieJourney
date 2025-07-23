@@ -4,14 +4,21 @@ import { Button } from "@components/ui/Button";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
+  const landingPageURL = "https://umutakturk14.github.io/Foodie";
+
+  const direct = () => {
+    window.location.href = landingPageURL;
+  };
 
   return (
     <header className="w-full fixed top-0 bg-gray-50/30 backdrop-blur-sm border-b border-gray-200 z-50">
       <nav className="w-11/12 md:w-3/4 h-20 m-auto flex justify-between items-center px-4">
         {/* Logo */}
-        <div className="flex gap-2 items-center">
+        <div
+          className="flex gap-2 items-center cursor-pointer"
+          onClick={() => direct()}
+        >
           <div className="bg-emerald-100 p-2 rounded-lg">
             <Leaf className="w-6 h-6 select-none text-emerald-700" />
           </div>
